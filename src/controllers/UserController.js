@@ -3,43 +3,35 @@ const UserModel = require("../models/UserModel");
 const bcrypt = require("bcrypt");
 exports.SignUp = async (req, res) => {
   try {
-    const { fullName, phoneNumber, password } = req.body;
-    // password validation
-    if (password.length < 4) {
-      return res.status(400).json({
-        success: false,
-        message: "The length of User password can be minimum 4 characters",
+    let reqBody = req.body;
+    let existAccount = await UserModel.findOne({
+      phoneNumber: reqBody.phoneNumber,
+    });
+    if (existAccount) {
+      return res.status(200).json({ status: "Already have an account" });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(reqBody.password, salt);
+    req.body.password = hash;
+    // Replace the original password with the hashed password
+    reqBody.password = hash;
+    // Create the user with the hashed password
+    let data = await UserModel.create(reqBody);
+    res
+      .status(200)
+      .json({
+        status: true,
+        message: "Account created successfully",
+        data: data,
       });
-    }
-
-    // existing user
-    const existingUser = await UserModel.findOne({ phoneNumber });
-    if (existingUser) {
-      return res
-        .status(400)
-        .json({ success: false, message: "User Already Exist" });
-    }
-    // Hashed Password
-    const hashedPassword = await bcrypt.hash(password, 8);
-
-    // create user
-    await UserModel.create({
-      fullName,
-      phoneNumber,
-      password: hashedPassword,
-    });
-
-    // response
-    res.status(201).json({
-      success: true,
-      message: "User Registration Successful",
-    });
   } catch (error) {
-    res.status(200).json({ status: false });
+    res
+      .status(500)
+      .json({ error: "Something went wrong", error: error.message });
   }
 };
 
-exports.login = async (req, res) => {
+exports.login = async (req, res, next) => {
   try {
     const { phoneNumber, password } = req.body;
     // Check if the user exists
@@ -59,10 +51,16 @@ exports.login = async (req, res) => {
     // generate token
     const token = EncodeToken({ user });
     // response
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 3600000,
+    });
     res.status(200).json({
       success: true,
       message: "User Login Successful",
       token: token,
+      data: user,
     });
   } catch (error) {
     next(error);

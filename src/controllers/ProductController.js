@@ -10,7 +10,12 @@ const {
   SuggestionProducts,
   GetAllProducts,
 } = require("../services/ProductService");
-const { RemoveCart, CreateCart, Cart } = require("../services/CartService");
+const {
+  RemoveCart,
+  CreateCart,
+  Cart,
+  TotalPrice,
+} = require("../services/CartService");
 const ProductDetailModel = require("../models/ProductDetailsModel");
 
 exports.SliderList = async (req, res) => {
@@ -71,7 +76,6 @@ exports.RemoveCartList = async (req, res) => {
   let result = await RemoveCart(req);
   return res.status(200).json(result);
 };
-
 exports.ListReview = async (req, res) => {
   return res.status(200).json({
     success: true,
@@ -96,4 +100,69 @@ exports.AllProductsList = async (req, res) => {
 exports.AllProducts = async (req, res) => {
   let result = await GetAllProducts(req);
   return res.status(200).json(result);
+};
+
+exports.CreateProduct = async (req, res) => {
+  const findCategory = await CategoryModel.findById(req.body.category);
+  if (!findCategory) {
+    return res.status(400).json({ error: "Category not found" });
+  }
+  const { name, description, price, image, brand, category, Stock } = req.body;
+  try {
+    const product = await ProductModel.create({
+      name,
+      description,
+      price,
+      image,
+      brand,
+      category,
+      Stock,
+    });
+    return res.status(200).json(product);
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to create product" });
+  }
+};
+
+// Update Product
+exports.UpdateProduct = async (req, res) => {
+  const { productID, title, shortDes, price, image, brand, category, Stock } =
+    req.body;
+  try {
+    const product = await ProductModel.findByIdAndUpdate(
+      productID,
+      {
+        title,
+        shortDes,
+        price,
+        image,
+        brand,
+        category,
+        Stock,
+      },
+      { new: true }
+    );
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    } else {
+      return res.status(200).json({ message: "Product updated successfully" });
+    }
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to update product" });
+  }
+};
+
+// Delete Product
+exports.DeleteProduct = async (req, res) => {
+  const { productID } = req.body;
+  try {
+    const product = await ProductModel.findByIdAndDelete(productID);
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    } else {
+      return res.status(200).json({ message: "Product deleted successfully" });
+    }
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to delete product" });
+  }
 };

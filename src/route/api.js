@@ -6,6 +6,7 @@ const UserController = require("../controllers/UserController");
 const ProfileController = require("../controllers/ProfileController");
 const InvoiceController = require("../controllers/InvoiceController");
 const AuthVerification = require("../middleware/AuthVerification");
+const Authorization = require("../middleware/Authorization");
 
 const router = express.Router();
 
@@ -49,14 +50,12 @@ router.post(
   AuthVerification,
   ProductController.RemoveCartList
 );
-
 router.post("/signUp", UserController.SignUp);
 router.post("/login", UserController.login);
 // // User
 // router.post("/UserLogin/:email", UserController.UserLogin);
 // router.post("/VerifyLogin/:email/:otp", UserController.VerifyLogin);
 router.get("/UserLogout", UserController.UserLogout);
-// router.get("/UserLogout", UserController.UserLogout);
 
 // // Profile
 router.post(
@@ -103,5 +102,39 @@ router.get(
   AuthVerification,
   InvoiceController.PaymentIPN
 );
+
+//Admin route
+router.post(
+  "/CreateProduct",
+  AuthVerification,
+  ProductController.CreateProduct
+);
+router.post(
+  "/UpdateProduct",
+  AuthVerification,
+  ProductController.UpdateProduct
+);
+router.delete(
+  "DeleteProduct",
+  AuthVerification,
+  ProductController.DeleteProduct
+);
+
+router.post(
+  "/CreateCategory",
+  AuthVerification,
+  CategoryController.CreateCategory
+);
+router.post(
+  "/UpdateCategory",
+  AuthVerification,
+  CategoryController.UpdateCategory
+);
+router.post(
+  "/DeleteCategory",
+  AuthVerification,
+  CategoryController.DeleteCategory
+);
+router.post("/CreateBrand", AuthVerification, BrandController.CreateBrand);
 
 module.exports = router;
