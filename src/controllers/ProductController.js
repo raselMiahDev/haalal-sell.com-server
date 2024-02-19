@@ -17,6 +17,10 @@ const {
   TotalPrice,
 } = require("../services/CartService");
 const ProductDetailModel = require("../models/ProductDetailsModel");
+const {
+  ProductCreateService,
+  ProductDeleteService,
+} = require("../services/Admin/ProductService");
 
 exports.SliderList = async (req, res) => {
   let result = await ProductBySlider(req);
@@ -103,25 +107,8 @@ exports.AllProducts = async (req, res) => {
 };
 
 exports.CreateProduct = async (req, res) => {
-  const findCategory = await CategoryModel.findById(req.body.category);
-  if (!findCategory) {
-    return res.status(400).json({ error: "Category not found" });
-  }
-  const { name, description, price, image, brand, category, Stock } = req.body;
-  try {
-    const product = await ProductModel.create({
-      name,
-      description,
-      price,
-      image,
-      brand,
-      category,
-      Stock,
-    });
-    return res.status(200).json(product);
-  } catch (error) {
-    return res.status(500).json({ error: "Failed to create product" });
-  }
+  let result = await ProductCreateService(req);
+  return res.status(200).json(result);
 };
 
 // Update Product
@@ -154,15 +141,6 @@ exports.UpdateProduct = async (req, res) => {
 
 // Delete Product
 exports.DeleteProduct = async (req, res) => {
-  const { productID } = req.body;
-  try {
-    const product = await ProductModel.findByIdAndDelete(productID);
-    if (!product) {
-      return res.status(404).json({ error: "Product not found" });
-    } else {
-      return res.status(200).json({ message: "Product deleted successfully" });
-    }
-  } catch (error) {
-    return res.status(500).json({ error: "Failed to delete product" });
-  }
+  let result = await ProductDeleteService(req);
+  return res.status(200).json(result);
 };

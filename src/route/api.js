@@ -104,18 +104,14 @@ router.get(
 );
 
 //Admin route
-router.post(
-  "/CreateProduct",
-  AuthVerification,
-  ProductController.CreateProduct
-);
+router.post("/CreateProduct", ProductController.CreateProduct);
 router.post(
   "/UpdateProduct",
   AuthVerification,
   ProductController.UpdateProduct
 );
 router.delete(
-  "DeleteProduct",
+  "/DeleteProduct/:id",
   AuthVerification,
   ProductController.DeleteProduct
 );
