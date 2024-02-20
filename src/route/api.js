@@ -15,6 +15,7 @@ router.get("/BrandList", BrandController.BrandList);
 router.get("/CategoryList", CategoryController.CategoryList);
 
 // // Product
+router.post("/CreateSlider", AuthVerification, ProductController.CreateSlider);
 router.get("/SliderList", ProductController.SliderList);
 router.get("/ListByCategory/:categoryID", ProductController.ListByCategory);
 router.get("/ListBySmilier/:categoryID", ProductController.ListBySmilier);
@@ -22,7 +23,11 @@ router.get("/ListByBrand/:brandID", ProductController.ListByBrand);
 router.get("/ListByKeyword/:keyword", ProductController.ListByKeyword);
 router.get("/ListReview", ProductController.ListReview);
 router.get("/ProductDetails/:id", ProductController.ProductDetails);
-// router.post("/ProductDetails", ProductController.CreateProductDetails);
+router.post(
+  "/CreateProductDetails",
+  AuthVerification,
+  ProductController.CreateProductDetails
+);
 router.get("/ListByRemark/:remark", ProductController.ListByRemark);
 router.get("/SuggestionProducts", ProductController.AllProductsList);
 router.get("/AllProduct", ProductController.AllProducts);

@@ -119,6 +119,21 @@ const ProductByCategoryLimit10 = async (req) => {
     return { status: "fail", message: "Something went wrong", error: e };
   }
 };
+const CreateProductSlider = async (req) => {
+  try {
+    const { title, short_des, price, productID, img } = req.body;
+    const data = await ProductSliderModel.create({
+      title,
+      short_des,
+      price,
+      productID,
+      img,
+    });
+    return { status: "Success", data: data };
+  } catch (e) {
+    return { status: "fail", message: "Something went wrong", error: e };
+  }
+};
 const ProductBySlider = async (req) => {
   try {
     let matchStage = { $match: {} };
@@ -242,6 +257,7 @@ module.exports = {
   ProductByCategory,
   ProductByBrand,
   ProductByCategoryLimit10,
+  CreateProductSlider,
   ProductBySlider,
   ProductByKeyword,
   DetailsById,

@@ -9,6 +9,7 @@ const {
   DetailsById,
   SuggestionProducts,
   GetAllProducts,
+  CreateProductSlider,
 } = require("../services/ProductService");
 const {
   RemoveCart,
@@ -22,6 +23,10 @@ const {
   ProductDeleteService,
 } = require("../services/Admin/ProductService");
 
+exports.CreateSlider = async (req, res) => {
+  let result = await CreateProductSlider(req);
+  return res.status(200).json(result);
+};
 exports.SliderList = async (req, res) => {
   let result = await ProductBySlider(req);
   return res.status(200).json(result);
