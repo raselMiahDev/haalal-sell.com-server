@@ -14,13 +14,11 @@ exports.CreateCategory = async (req, res) => {
       categoryImg,
     });
 
-    return res
-      .status(200)
-      .json({
-        status: true,
-        message: "Category create success",
-        data: category,
-      });
+    return res.status(200).json({
+      status: true,
+      message: "Category create success",
+      data: category,
+    });
   } catch (error) {
     return res.status(500).json({ error: "Failed to create category" });
   }
@@ -52,15 +50,13 @@ exports.UpdateCategory = async (req, res) => {
 
 // Delete Category
 exports.DeleteCategory = async (req, res) => {
-  const { categoryID } = req.body;
   try {
-    const category = await CategoryModel.findByIdAndDelete(categoryID);
-    if (!category) {
-      return res.status(404).json({ error: "Category not found" });
-    } else {
-      return res.status(200).json({ message: "Category deleted successfully" });
+    const id = req.params.id;
+    const categoryDelete = await CategoryModel.findByIdAndDelete({ _id: id });
+    if (categoryDelete) {
+      return { status: true, message: "Delete Success" };
     }
-  } catch (error) {
-    return res.status(500).json({ error: "Failed to update category" });
+  } catch (err) {
+    return [];
   }
 };

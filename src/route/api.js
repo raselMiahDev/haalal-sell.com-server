@@ -17,6 +17,11 @@ router.get("/CategoryList", CategoryController.CategoryList);
 // // Product
 router.post("/CreateSlider", AuthVerification, ProductController.CreateSlider);
 router.get("/SliderList", ProductController.SliderList);
+router.delete(
+  "/DeleteSlider/:id",
+  AuthVerification,
+  ProductController.DeleteSlider
+);
 router.get("/ListByCategory/:categoryID", ProductController.ListByCategory);
 router.get("/ListBySmilier/:categoryID", ProductController.ListBySmilier);
 router.get("/ListByBrand/:brandID", ProductController.ListByBrand);
@@ -57,9 +62,7 @@ router.post(
 );
 router.post("/signUp", UserController.SignUp);
 router.post("/login", UserController.login);
-// // User
-// router.post("/UserLogin/:email", UserController.UserLogin);
-// router.post("/VerifyLogin/:email/:otp", UserController.VerifyLogin);
+
 router.get("/UserLogout", UserController.UserLogout);
 
 // // Profile
@@ -131,11 +134,16 @@ router.post(
   AuthVerification,
   CategoryController.UpdateCategory
 );
-router.post(
-  "/DeleteCategory",
+router.delete(
+  "/DeleteCategory/:id",
   AuthVerification,
   CategoryController.DeleteCategory
 );
 router.post("/CreateBrand", AuthVerification, BrandController.CreateBrand);
+router.delete(
+  "/DeleteBrand/:id",
+  AuthVerification,
+  BrandController.DeleteBrand
+);
 
 module.exports = router;

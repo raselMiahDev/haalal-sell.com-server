@@ -24,7 +24,7 @@ exports.CreateBrand = async (req, res) => {
 };
 
 // Update Category
-exports.UpdateCategory = async (req, res) => {
+exports.UpdateBrand = async (req, res) => {
   const { categoryID, categoryName, categoryImg } = req.body;
 
   try {
@@ -48,16 +48,14 @@ exports.UpdateCategory = async (req, res) => {
 };
 
 // Delete Category
-exports.DeleteCategory = async (req, res) => {
-  const { categoryID } = req.body;
+exports.DeleteBrand = async (req, res) => {
   try {
-    const category = await BrandModel.findByIdAndDelete(categoryID);
-    if (!category) {
-      return res.status(404).json({ error: "Category not found" });
-    } else {
-      return res.status(200).json({ message: "Category deleted successfully" });
+    const id = req.params.id;
+    const brandDelete = await BrandModel.findByIdAndDelete({ _id: id });
+    if (brandDelete) {
+      return { status: true, message: "Delete Success" };
     }
-  } catch (error) {
-    return res.status(500).json({ error: "Failed to update category" });
+  } catch (err) {
+    return [];
   }
 };

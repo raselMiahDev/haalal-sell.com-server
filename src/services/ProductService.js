@@ -134,6 +134,15 @@ const CreateProductSlider = async (req) => {
     return { status: "fail", message: "Something went wrong", error: e };
   }
 };
+const DeleteProductSlider = async (req) => {
+  try {
+    const id = req.params.id;
+    const data = await ProductSliderModel.findByIdAndDelete({ _id: id });
+    return { status: "Success", data: data };
+  } catch (e) {
+    return { status: "fail", message: "Something went wrong", error: e };
+  }
+};
 const ProductBySlider = async (req) => {
   try {
     let matchStage = { $match: {} };
@@ -263,4 +272,5 @@ module.exports = {
   DetailsById,
   SuggestionProducts,
   GetAllProducts,
+  DeleteProductSlider,
 };

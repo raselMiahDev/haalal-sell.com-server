@@ -10,6 +10,7 @@ const {
   SuggestionProducts,
   GetAllProducts,
   CreateProductSlider,
+  DeleteProductSlider,
 } = require("../services/ProductService");
 const {
   RemoveCart,
@@ -32,6 +33,10 @@ exports.SliderList = async (req, res) => {
   return res.status(200).json(result);
 };
 
+exports.DeleteSlider = async (req, res) => {
+  let result = await DeleteProductSlider(req);
+  return res.status(200).json(result);
+};
 exports.ListByCategory = async (req, res) => {
   let result = await ProductByCategory(req);
   return res.status(200).json(result);
