@@ -11,6 +11,19 @@ const DataSchema = mongoose.Schema(
       unique: true,
       split: true,
     },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      split: true,
+    },
+    address: {
+      type: String,
+      required: true,
+    },
+    postCode: {
+      type: String,
+    },
     password: {
       type: String,
       required: true,
