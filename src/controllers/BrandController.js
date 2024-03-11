@@ -1,5 +1,6 @@
 const { AllBrands } = require("../services/ProductService");
 const BrandModel = require("../models/BrandModel");
+const UpdateService = require("../services/common/UpdateService");
 exports.BrandList = async (req, res) => {
   let result = await AllBrands(req);
   return res.status(200).json(result);
@@ -25,26 +26,8 @@ exports.CreateBrand = async (req, res) => {
 
 // Update Category
 exports.UpdateBrand = async (req, res) => {
-  const { categoryID, categoryName, categoryImg } = req.body;
-
-  try {
-    const category = await BrandModel.findByIdAndUpdate(
-      categoryID,
-      {
-        categoryName,
-        categoryImg,
-      },
-      { new: true }
-    );
-
-    if (!category) {
-      return res.status(404).json({ error: "Category not found" });
-    } else {
-      return res.status(200).json({ message: "Category updated successfully" });
-    }
-  } catch (error) {
-    return res.status(500).json({ error: "Failed to update category" });
-  }
+  let result = await UpdateService(req, BrandModel);
+  return res.status(200).json(result);
 };
 
 // Delete Category
@@ -55,6 +38,15 @@ exports.DeleteBrand = async (req, res) => {
     if (brandDelete) {
       return { status: true, message: "Delete Success" };
     }
+  } catch (err) {
+    return [];
+  }
+};
+exports.BrandDetailsById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = await BrandModel.find({ id });
+    return res.status(200).json(data);
   } catch (err) {
     return [];
   }

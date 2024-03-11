@@ -114,7 +114,7 @@ router.get(
 //Admin route
 router.post("/CreateProduct", ProductController.CreateProduct);
 router.post(
-  "/UpdateProduct",
+  "/UpdateProduct/:id",
   AuthVerification,
   ProductController.UpdateProduct
 );
@@ -130,7 +130,7 @@ router.post(
   CategoryController.CreateCategory
 );
 router.post(
-  "/UpdateCategory",
+  "/UpdateCategory/:id",
   AuthVerification,
   CategoryController.UpdateCategory
 );
@@ -145,5 +145,11 @@ router.delete(
   AuthVerification,
   BrandController.DeleteBrand
 );
+router.get(
+  "/BrandDetailsById/:id",
+  AuthVerification,
+  BrandController.BrandDetailsById
+);
+router.post("/UpdateBrand/:id", AuthVerification, BrandController.UpdateBrand);
 
 module.exports = router;

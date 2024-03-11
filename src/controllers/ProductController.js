@@ -23,6 +23,8 @@ const {
   ProductCreateService,
   ProductDeleteService,
 } = require("../services/Admin/ProductService");
+const UpdateService = require("../services/common/UpdateService");
+const ProductModel = require("../models/ProductsModel");
 
 exports.CreateSlider = async (req, res) => {
   let result = await CreateProductSlider(req);
@@ -123,30 +125,8 @@ exports.CreateProduct = async (req, res) => {
 
 // Update Product
 exports.UpdateProduct = async (req, res) => {
-  const { productID, title, shortDes, price, image, brand, category, Stock } =
-    req.body;
-  try {
-    const product = await ProductModel.findByIdAndUpdate(
-      productID,
-      {
-        title,
-        shortDes,
-        price,
-        image,
-        brand,
-        category,
-        Stock,
-      },
-      { new: true }
-    );
-    if (!product) {
-      return res.status(404).json({ error: "Product not found" });
-    } else {
-      return res.status(200).json({ message: "Product updated successfully" });
-    }
-  } catch (error) {
-    return res.status(500).json({ error: "Failed to update product" });
-  }
+  let result = await UpdateService(req, ProductModel);
+  return res.status(200).json(result);
 };
 
 // Delete Product
