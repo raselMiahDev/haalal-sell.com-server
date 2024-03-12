@@ -1,10 +1,10 @@
 const { AllCategory } = require("../services/ProductService");
 const CategoryModel = require("../models/CategoryModel");
+const UpdateService = require("../services/common/UpdateService");
 exports.CategoryList = async (req, res) => {
   let result = await AllCategory(req);
   return res.status(200).json(result);
 };
-
 exports.CreateCategory = async (req, res) => {
   const { categoryName, categoryImg } = req.body;
 
@@ -23,31 +23,11 @@ exports.CreateCategory = async (req, res) => {
     return res.status(500).json({ error: "Failed to create category" });
   }
 };
-
 // Update Category
 exports.UpdateCategory = async (req, res) => {
-  const { categoryID, categoryName, categoryImg } = req.body;
-
-  try {
-    const category = await CategoryModel.findByIdAndUpdate(
-      categoryID,
-      {
-        categoryName,
-        categoryImg,
-      },
-      { new: true }
-    );
-
-    if (!category) {
-      return res.status(404).json({ error: "Category not found" });
-    } else {
-      return res.status(200).json({ message: "Category updated successfully" });
-    }
-  } catch (error) {
-    return res.status(500).json({ error: "Failed to update category" });
-  }
+  let result = await UpdateService(req, CategoryModel);
+  return res.status(200).json(result);
 };
-
 // Delete Category
 exports.DeleteCategory = async (req, res) => {
   try {
@@ -58,5 +38,15 @@ exports.DeleteCategory = async (req, res) => {
     }
   } catch (err) {
     return [];
+  }
+};
+
+exports.CategoryDetailsById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const data = await CategoryModel.find({ _id: id });
+    return res.status(200).json(data);
+  } catch (err) {
+    return res.status(200).json({ message: "no data found" });
   }
 };

@@ -139,17 +139,18 @@ router.delete(
   AuthVerification,
   CategoryController.DeleteCategory
 );
+router.get(
+  "/CategoryDetailsById/:id",
+  AuthVerification,
+  CategoryController.CategoryDetailsById
+);
 router.post("/CreateBrand", AuthVerification, BrandController.CreateBrand);
 router.delete(
   "/DeleteBrand/:id",
   AuthVerification,
   BrandController.DeleteBrand
 );
-router.get(
-  "/BrandDetailsById/:id",
-  AuthVerification,
-  BrandController.BrandDetailsById
-);
+router.get("/BrandDetailsById/:id", BrandController.BrandDetailsById);
 router.post("/UpdateBrand/:id", AuthVerification, BrandController.UpdateBrand);
 
 module.exports = router;

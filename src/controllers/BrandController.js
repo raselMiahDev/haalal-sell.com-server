@@ -29,7 +29,6 @@ exports.UpdateBrand = async (req, res) => {
   let result = await UpdateService(req, BrandModel);
   return res.status(200).json(result);
 };
-
 // Delete Category
 exports.DeleteBrand = async (req, res) => {
   try {
@@ -45,9 +44,9 @@ exports.DeleteBrand = async (req, res) => {
 exports.BrandDetailsById = async (req, res) => {
   try {
     const id = req.params.id;
-    const data = await BrandModel.find({ id });
+    const data = await BrandModel.find({ _id: id });
     return res.status(200).json(data);
   } catch (err) {
-    return [];
+    return res.status(200).json({ message: "no data found" });
   }
 };
